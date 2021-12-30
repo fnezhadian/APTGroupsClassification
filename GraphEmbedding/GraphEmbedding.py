@@ -53,8 +53,8 @@ def main():
         for file_path in get_files(sub_dir):
             graph_list.append(get_nx_graph(file_path))
 
-    embeddings = get_embedding(graph_list)
-    print(embeddings)
+    embedding = get_embedding(graph_list)
+    print(embedding)
 
 
 if __name__ == "__main__":
