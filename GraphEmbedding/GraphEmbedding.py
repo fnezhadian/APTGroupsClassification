@@ -4,6 +4,9 @@ import pydot
 import os
 
 
+dot_files_path = "D:\\Material\\DOT"
+
+
 def get_subdirectories(main_dir):
     sub_dir_list = []
     for sub_dir in os.listdir(main_dir):
@@ -46,15 +49,23 @@ def get_embedding(graph_list):
     return model.get_embedding()
 
 
+def split_dataset(embedding):
+    train, test = train_test_split(embedding, test_size=0.2)
+    return train, test
+
+
 def main():
-    dot_files_path = "D:\\Material\\DOT"
     graph_list = []
     for sub_dir in get_subdirectories(dot_files_path):
         for file_path in get_files(sub_dir):
             graph_list.append(get_nx_graph(file_path))
 
     embedding = get_embedding(graph_list)
-    print(embedding)
+    embedding = get_embedding(graph_list)
+    traint, test = split_dataset(embedding)
+    print(len(traint))
+    print(len(test))
+    # TODO: apply machine learning algorithms
 
 
 if __name__ == "__main__":
