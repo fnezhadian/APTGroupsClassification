@@ -9,9 +9,7 @@ def get_subdirectories(main_dir):
     for sub_dir in os.listdir(main_dir):
         sub_dir_path = os.path.join(main_dir, sub_dir)
         if os.path.isdir(sub_dir_path):
-            sub_dir_new_path = sub_dir_path.replace(" ", "")
-            os.rename(sub_dir_path, sub_dir_new_path)
-            sub_dir_list.append(sub_dir_new_path)
+            sub_dir_list.append(sub_dir_path)
     return sub_dir_list
 
 
