@@ -49,11 +49,6 @@ def get_embedding(graph_list):
     return model.get_embedding()
 
 
-def split_dataset(embedding):
-    train, test = train_test_split(embedding, test_size=0.2)
-    return train, test
-
-
 def main():
     graph_list = []
     for sub_dir in get_subdirectories(dot_files_path):
@@ -61,10 +56,6 @@ def main():
             graph_list.append(get_nx_graph(file_path))
 
     embedding = get_embedding(graph_list)
-    embedding = get_embedding(graph_list)
-    traint, test = split_dataset(embedding)
-    print(len(traint))
-    print(len(test))
     # TODO: apply machine learning algorithms
 
 
