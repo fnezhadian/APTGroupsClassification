@@ -45,6 +45,24 @@ def get_nx_graph(dot_file_path):
         # TODO: Log
         print(dot_file_path)
 
+        
+def convert_category_to_number(argument):
+    switcher = {
+        "APT1": 1,
+        "APT10": 2,
+        "APT19": 3,
+        "APT21": 4,
+        "APT28": 5,
+        "APT29": 6,
+        "APT30": 7,
+        "DarkHotel": 8,
+        "EnergeticBear": 9,
+        "EquationGroup": 10,
+        "GorgonGroup": 11,
+        "Winnti": 12
+    }
+    return switcher.get(argument, 0)        
+
 
 def get_graph_list(dot_files_path):
     graph_list = []
@@ -52,7 +70,8 @@ def get_graph_list(dot_files_path):
     for sub_dir in get_subdirectories(dot_files_path):
         for file_path in get_files(sub_dir):
             graph_list.append(get_nx_graph(file_path))
-            target.append(os.path.basename(sub_dir))
+            dir_number = convert_category_to_number(os.path.basename(sub_dir))
+            target.append(dir_number)
             
     target = np.array(target)
     return graph_list, target
