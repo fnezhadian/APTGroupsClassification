@@ -31,9 +31,9 @@ def apply_classifiers(vectors, target):
     KNN_classifier = KNeighborsClassifier(n_neighbors=3)
     RF_classifier = RandomForestClassifier()
 
-    NB_prediction_results, NB_Score = apply_model(NB_classifier, X_train, X_test, y_train, y_test)
-    KNN_prediction_results, KNN_Score = apply_model(KNN_classifier, X_train, X_test, y_train, y_test)
-    RF_prediction_results, RF_Score = apply_model(RF_classifier, X_train, X_test, y_train, y_test)
+    NB_predictions, NB_Score = apply_model(NB_classifier, X_train, X_test, y_train, y_test)
+    KNN_predictions, KNN_Score = apply_model(KNN_classifier, X_train, X_test, y_train, y_test)
+    RF_predictions, RF_Score = apply_model(RF_classifier, X_train, X_test, y_train, y_test)
 
 
 def main():
