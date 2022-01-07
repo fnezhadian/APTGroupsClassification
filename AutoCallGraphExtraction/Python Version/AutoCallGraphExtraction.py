@@ -8,7 +8,7 @@ script_file_path = "D:\\Material\\Script\\GenerateDOTGraph.py"
 OutputPath = "D:\\Material\\DOT"
 searchPattern = "*.zip"
 password = "infected"
-runtime_files_extensions: list[str] = ["", "id0", "id1", "id2", "nam", "til"]
+runtime_files_extensions: list[str] = ["", "id0", "id1", "id2", "nam", "til", "asm", "i64"]
 
 
 def get_subdirectories(main_dir):
@@ -41,6 +41,9 @@ def get_files(directory):
 
 
 def run_ida_process(file_path):
+    command = 'cmd /c idat64 -B {0}'.format(file_path)
+    process = subprocess.Popen(command, cwd=ida_path)
+    process.wait()
     command = 'cmd /c idat64 -a -A -S{0} {1}'.format(script_file_path, file_path)
     process = subprocess.Popen(command, cwd=ida_path)
     process.wait()
