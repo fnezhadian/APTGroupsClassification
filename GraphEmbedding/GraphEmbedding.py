@@ -27,7 +27,7 @@ def get_files(directory):
 
 def get_nx_graph(dot_file_path):
     try:
-        graphs = pydot.graph_from_dot_file(dot_file_path)
+        graphs = pydot.graph_from_dot_file(dot_file_path, encoding="UTF-8")
         converted_graph = nx.nx_pydot.from_pydot(graphs[0])
         graph = nx.classes.graph.Graph()
 
