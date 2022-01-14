@@ -1,8 +1,12 @@
 import networkx as nx
+from karateclub import Graph2Vec, FeatherGraph
 from karateclub.graph_embedding import GL2Vec
-import pydot
 import os
 import numpy as np
+
+
+gml_files_path = "D:\\Material\\Current\\Flow\\GML"
+dataset_path = "D:\\Material\\Current\\Flow\\Dataset\\GL2Vec"
 
 
 def get_subdirectories(main_dir):
@@ -14,10 +18,10 @@ def get_subdirectories(main_dir):
     return sub_dir_list
 
 
-def get_files(directory):
+def get_gml_files(directory):
     target_files = []
     for filename in os.listdir(directory):
-        if filename.endswith(".dot"):
+        if filename.endswith(".gml"):
             full_path = os.path.join(directory, filename)
             if not os.path.isfile(full_path):
                 continue
@@ -25,27 +29,22 @@ def get_files(directory):
     return target_files
 
 
-def get_nx_graph(dot_file_path):
-    try:
-        graphs = pydot.graph_from_dot_file(dot_file_path, encoding="UTF-8")
-        converted_graph = nx.nx_pydot.from_pydot(graphs[0])
-        graph = nx.classes.graph.Graph()
+def read_graph(gml_file_path):
+    retrieved_graph = nx.read_gml(gml_file_path)
+    graph = nx.classes.graph.Graph()
 
-        # GL2Vec document says: "The procedure assumes that nodes have no string feature present"
-        for n in converted_graph.nodes:
-            if n == '\\n':
-                continue
-            graph.add_node(int(n))
+    # GL2Vec document says: "The procedure assumes that nodes have no string feature present"
+    for n in retrieved_graph.nodes:
+        if n == '\\n':
+            continue
+        graph.add_node(int(n))
 
-        for e in converted_graph.edges:
-            graph.add_edge(int(e[0]), int(e[1]))
+    for e in retrieved_graph.edges:
+        graph.add_edge(int(e[0]), int(e[1]))
 
-        return graph
-    except:
-        # TODO: Log
-        print(dot_file_path)
+    return graph
 
-        
+
 def convert_category_to_number(argument):
     switcher = {
         "APT1": 1,
@@ -61,35 +60,41 @@ def convert_category_to_number(argument):
         "GorgonGroup": 11,
         "Winnti": 12
     }
-    return switcher.get(argument, 0)        
+    return switcher.get(argument, 0)
 
 
-def get_graph_list(dot_files_path):
+def get_graph_list():
     graph_list = []
     target = []
-    for sub_dir in get_subdirectories(dot_files_path):
-        for file_path in get_files(sub_dir):
-            graph_list.append(get_nx_graph(file_path))
+    for sub_dir in get_subdirectories(gml_files_path):
+        for file_path in get_gml_files(sub_dir):
+            print(file_path)
+            graph = read_graph(file_path)
+            graph_list.append(graph)
             dir_number = convert_category_to_number(os.path.basename(sub_dir))
             target.append(dir_number)
-            
+
     target = np.array(target)
     return graph_list, target
 
 
 def get_embedding(graph_list):
     model = GL2Vec()
+    # model = Graph2Vec()
+    # model = FeatherGraph()
     model.fit(graph_list)
     return model.get_embedding()
 
 
 def main():
-    dot_files_path = "D:\\Material\\DOT"
-    graph_list, target = get_graph_list(dot_files_path)
+    graph_list, target = get_graph_list()
     embedding = get_embedding(graph_list)
 
-    np.savetxt('target.txt', target, fmt='%s')
-    np.savetxt('vector.txt', embedding, fmt='%.18e')
+    target_path = os.path.join(dataset_path, "target.txt")
+    vector_path = os.path.join(dataset_path, "vector.txt")
+
+    np.savetxt(target_path, target, fmt='%s')
+    np.savetxt(vector_path, embedding, fmt='%.18e')
 
 
 if __name__ == "__main__":
