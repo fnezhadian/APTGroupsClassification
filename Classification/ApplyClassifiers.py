@@ -13,8 +13,8 @@ from sklearn.neural_network._multilayer_perceptron import MLPClassifier
 from sklearn import metrics
 
 
-target_names = ["APT1", "APT10", "APT19", "APT21", "APT28", "APT29", "APT30", "DarkHotel", "EnergeticBear",
-                "EquationGroup", "GorgonGroup", "Winnti"]
+target_names = ["APT1", "APT10", "APT19", "APT21", "APT28", "APT29", "APT30"
+                , "DarkHotel", "EnergeticBear", "EquationGroup", "GorgonGroup", "Winnti"]
 
 
 def split_dataset(vectors, target):
@@ -30,8 +30,8 @@ def get_score(classifier, X_test, y_test):
 
 
 def get_classification_report(actual_data, predicted_data):
-    report = metrics.classification_report(y_true=actual_data, y_pred=predicted_data, zero_division=0
-                                           , target_names=target_names)
+    report = metrics.classification_report(y_true=actual_data, y_pred=predicted_data
+                                           , zero_division=0, target_names=target_names)
     return report
 
 
