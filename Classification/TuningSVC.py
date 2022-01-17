@@ -8,9 +8,12 @@ param_grid = {'C': [0.1, 1, 10, 100, 1000], 'gamma': [1, 0.1, 0.01, 0.001]
     , 'kernel': ['rbf', 'poly', 'sigmoid', 'linear']
     , 'degree': [0, 1, 2, 3, 4, 5, 6]}
 
+kernels = ['poly', 'rbf', 'sigmoid', 'linear']
+test_sizes = [0.2, 0.3, 0.4, 0.5]
 
-def split_dataset(vectors, target):
-    return train_test_split(vectors, target, test_size=0.2)
+
+def split_dataset(vectors, target, test_size):
+    return train_test_split(vectors, target, test_size=test_size)
 
 
 def predict(classifier, X_test):
@@ -38,13 +41,13 @@ def get_param_tuning(vectors, target):
 
 
 def apply_classifiers(vectors, target):
-    X_train, X_test, y_train, y_test = split_dataset(vectors, target)
-    kernels = ['poly', 'rbf', 'sigmoid', 'linear']
+    for test_size in test_sizes:
+        X_train, X_test, y_train, y_test = split_dataset(vectors, target, test_size)
 
-    for kernel in kernels:
-        classifier = svm.SVC(kernel=kernel, C=100, gamma=0.1, degree=0)
-        prediction, score = apply_model(classifier, X_train, X_test, y_train, y_test)
-        print(type(classifier), classifier.kernel, round(score, ndigits=2))
+        for kernel in kernels:
+            classifier = svm.SVC(kernel=kernel, C=100, gamma=0.1, degree=0)
+            prediction, score = apply_model(classifier, X_train, X_test, y_train, y_test)
+            print(test_size, type(classifier), classifier.kernel, round(score, ndigits=2))
 
 
 def main():
@@ -56,7 +59,7 @@ def main():
     vectors = np.loadtxt(vector_path, dtype=float)
 
     # get_param_tuning(vectors, target)  # result: best estimator -> SVC(C=100, degree=0, gamma=0.1)
-    apply_classifiers(vectors, target)  # result: best kernel -> rbf
+    apply_classifiers(vectors, target)  # result: best kernel -> rbf, test_size: 0.2
 
 
 if __name__ == "__main__":
