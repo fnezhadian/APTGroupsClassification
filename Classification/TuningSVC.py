@@ -4,7 +4,9 @@ from sklearn.model_selection import train_test_split
 from sklearn import svm
 from sklearn.model_selection import GridSearchCV
 
-param_grid = {'C': [0.1, 1, 10, 100], 'gamma': [1, 0.1, 0.01, 0.001], 'kernel': ['rbf', 'poly', 'sigmoid', 'linear']}
+param_grid = {'C': [0.1, 1, 10, 100, 1000], 'gamma': [1, 0.1, 0.01, 0.001]
+    , 'kernel': ['rbf', 'poly', 'sigmoid', 'linear']
+    , 'degree': [0, 1, 2, 3, 4, 5, 6]}
 
 
 def split_dataset(vectors, target):
@@ -39,10 +41,10 @@ def apply_classifiers(vectors, target):
     X_train, X_test, y_train, y_test = split_dataset(vectors, target)
 
     classifiers = [
-        svm.SVC(kernel='poly', C=100, gamma=0.1),
-        svm.SVC(kernel='rbf', C=100, gamma=0.1),
-        svm.SVC(kernel='sigmoid', C=100, gamma=0.1),
-        svm.SVC(kernel='linear', C=100, gamma=0.1),
+        svm.SVC(kernel='poly', C=100, gamma=0.1, degree=0),
+        svm.SVC(kernel='rbf', C=100, gamma=0.1, degree=0),
+        svm.SVC(kernel='sigmoid', C=100, gamma=0.1, degree=0),
+        svm.SVC(kernel='linear', C=100, gamma=0.1, degree=0),
     ]
 
     for classifier in classifiers:
@@ -63,7 +65,7 @@ def main():
         target = np.loadtxt(target_path, dtype=int)
         vectors = np.loadtxt(vector_path, dtype=float)
 
-        # get_param_tuning(vectors, target)  # result: best estimator -> SVC(C = 100, gamma = 0.1)
+        # get_param_tuning(vectors, target)  # result: best estimator -> SVC(C=100, degree=0, gamma=0.1)
         apply_classifiers(vectors, target)  # result: best kernel -> rbf
 
 
