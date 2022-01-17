@@ -39,34 +39,24 @@ def get_param_tuning(vectors, target):
 
 def apply_classifiers(vectors, target):
     X_train, X_test, y_train, y_test = split_dataset(vectors, target)
+    kernels = ['poly', 'rbf', 'sigmoid', 'linear']
 
-    classifiers = [
-        svm.SVC(kernel='poly', C=100, gamma=0.1, degree=0),
-        svm.SVC(kernel='rbf', C=100, gamma=0.1, degree=0),
-        svm.SVC(kernel='sigmoid', C=100, gamma=0.1, degree=0),
-        svm.SVC(kernel='linear', C=100, gamma=0.1, degree=0),
-    ]
-
-    for classifier in classifiers:
+    for kernel in kernels:
+        classifier = svm.SVC(kernel=kernel, C=100, gamma=0.1, degree=0)
         prediction, score = apply_model(classifier, X_train, X_test, y_train, y_test)
         print(type(classifier), classifier.kernel, round(score, ndigits=2))
 
 
 def main():
-    datasets_path = [
-        "D:\\Material\\Current\\Flow\\Dataset\\GL2Vec",
-    ]
+    dataset_path = "D:\\Material\\Current\\Flow\\Dataset\\GL2Vec"
+    target_path = os.path.join(dataset_path, "target.txt")
+    vector_path = os.path.join(dataset_path, "vector.txt")
 
-    for dataset_path in datasets_path:
-        print(dataset_path)
-        target_path = os.path.join(dataset_path, "target.txt")
-        vector_path = os.path.join(dataset_path, "vector.txt")
+    target = np.loadtxt(target_path, dtype=int)
+    vectors = np.loadtxt(vector_path, dtype=float)
 
-        target = np.loadtxt(target_path, dtype=int)
-        vectors = np.loadtxt(vector_path, dtype=float)
-
-        # get_param_tuning(vectors, target)  # result: best estimator -> SVC(C=100, degree=0, gamma=0.1)
-        apply_classifiers(vectors, target)  # result: best kernel -> rbf
+    # get_param_tuning(vectors, target)  # result: best estimator -> SVC(C=100, degree=0, gamma=0.1)
+    apply_classifiers(vectors, target)  # result: best kernel -> rbf
 
 
 if __name__ == "__main__":
