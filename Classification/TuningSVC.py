@@ -26,7 +26,7 @@ def apply_model(classifier, X_train, X_test, y_train, y_test):
     return prediction_results, score
 
 
-def get_fine_tuning(vectors, target):
+def get_param_tuning(vectors, target):
     X_train, X_test, y_train, y_test = split_dataset(vectors, target)
     grid = GridSearchCV(svm.SVC(), param_grid, refit=True, verbose=2)
     grid.fit(X_train, y_train)
@@ -63,7 +63,7 @@ def main():
         target = np.loadtxt(target_path, dtype=int)
         vectors = np.loadtxt(vector_path, dtype=float)
 
-        # get_fine_tuning(vectors, target)  # result: best estimator -> SVC(C = 100, gamma = 0.1)
+        # get_param_tuning(vectors, target)  # result: best estimator -> SVC(C = 100, gamma = 0.1)
         apply_classifiers(vectors, target)  # result: best kernel -> rbf
 
 
