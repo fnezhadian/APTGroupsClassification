@@ -32,7 +32,7 @@ def apply_model(classifier, X_train, X_test, y_train, y_test):
 
 
 def get_param_tuning(vectors, target):
-    X_train, X_test, y_train, y_test = split_dataset(vectors, target)
+    X_train, X_test, y_train, y_test = split_dataset(vectors, target, 0.2)
     grid = GridSearchCV(svm.SVC(), param_grid, refit=True, verbose=2)
     grid.fit(X_train, y_train)
     grid.score(X_test, y_test)
